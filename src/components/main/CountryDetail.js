@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { Box, Stack, Typography } from "@mui/material";
+import { Box, Button, Stack, Typography } from "@mui/material";
+import { Link } from "react-router-dom";
 
 import fetchFromAPI from "../../utils/api/fetchFromAPI";
+import { getCountryByCode } from "../../helper/countryHelper";
 
 const CountryDetail = () => {
   const [country, setCountry] = useState([]);
@@ -29,60 +31,122 @@ const CountryDetail = () => {
   if (!country[0]) {
     return "Loading...";
   }
-  console.log(country);
+
+  console.log(country[0]?.borders);
   return (
-    <Stack>
-      {country[0]?.capital[0]}
-      <Stack>
-        <Typography>{country[0]?.name?.common}</Typography>
-        <Typography>
-          Native Name: {handleNativeName(country[0]?.name?.nativeName)}
-        </Typography>
-        <Typography>
-          Population: {country[0]?.population.toLocaleString()}
-        </Typography>
-        <Typography>Region: {country[0]?.region}</Typography>
-        <Typography>Sub Region: {country[0]?.subregion}</Typography>
-        <Typography>Capital: {country[0]?.capital[0]}</Typography>
-        <Typography>Top Level Domain: {country[0]?.tld[0]}</Typography>
-        <Box>
-          <Typography component="span">Currencies: </Typography>
-          {Object.keys(country[0]?.currencies)?.map(
-            (currency, index, array) => {
-              if (index < array.length - 1) {
-                return (
-                  <Typography key={currency} component="span">
-                    {country[0]?.currencies[currency].name},{" "}
-                  </Typography>
-                );
-              } else {
-                return (
-                  <Typography key={currency} component="span">
-                    {country[0]?.currencies[currency].name}
-                  </Typography>
-                );
-              }
-            }
-          )}
+    <Stack mt={7} gap={4} direction={{ sm: "row" }} sx={{ maxWidth: "575px" }}>
+      <Box sx={{ width: { xs: "100%", md: "480px" } }}>
+        <img
+          alt={`flag of ${country[0]?.name?.common}`}
+          src={country[0]?.flags?.svg}
+          style={{ width: "100%", borderRadius: "7PX" }}
+        />
+      </Box>
+      <Stack id="country-detail-container">
+        <Box id="country-name-container">
+          <Typography variant="h5">
+            <b>{country[0]?.name?.common}</b>
+          </Typography>
         </Box>
-        <Box>
-          <Typography component="span">Languages: </Typography>
-          {Object.keys(country[0]?.languages)?.map((language, index, array) => {
-            if (index < array.length - 1) {
-              return (
-                <Typography key={language} component="span">
-                  {country[0]?.languages[language]},{" "}
+        <Stack id="country-information-container">
+          <Stack
+            direction={{ xs: "column", md: "row" }}
+            mt={2}
+            gap={{ xs: 3, md: 6 }}
+          >
+            <Stack id="country-information-1" gap={1}>
+              <Typography>
+                <b>Native Name: </b>
+                {handleNativeName(country[0]?.name?.nativeName)}
+              </Typography>
+              <Typography>
+                <b>Population: </b>
+                {country[0]?.population.toLocaleString()}
+              </Typography>
+              <Typography>
+                <b>Region: </b>
+                {country[0]?.region}
+              </Typography>
+              <Typography>
+                <b>Sub Region: </b>
+                {country[0]?.subregion}
+              </Typography>
+              <Typography>
+                <b>Capital: </b>
+                {country[0]?.capital[0]}
+              </Typography>
+            </Stack>
+            <Stack id="country-information-2" gap={1}>
+              <Typography>
+                <b>Top Level Domain: </b>
+                {country[0]?.tld[0]}
+              </Typography>
+              <Box>
+                <Typography component="span">
+                  <b>Currencies: </b>
                 </Typography>
-              );
-            } else {
-              return (
-                <Typography key={language} component="span">
-                  {country[0]?.languages[language]}
+                {Object.keys(country[0]?.currencies)?.map(
+                  (currency, index, array) => {
+                    if (index < array.length - 1) {
+                      return (
+                        <Typography key={currency} component="span">
+                          {country[0]?.currencies[currency].name},{" "}
+                        </Typography>
+                      );
+                    } else {
+                      return (
+                        <Typography key={currency} component="span">
+                          {country[0]?.currencies[currency].name}
+                        </Typography>
+                      );
+                    }
+                  }
+                )}
+              </Box>
+              <Box>
+                <Typography component="span">
+                  <b>Languages: </b>
                 </Typography>
+                {Object.keys(country[0]?.languages)?.map(
+                  (language, index, array) => {
+                    if (index < array.length - 1) {
+                      return (
+                        <Typography key={language} component="span">
+                          {country[0]?.languages[language]},{" "}
+                        </Typography>
+                      );
+                    } else {
+                      return (
+                        <Typography key={language} component="span">
+                          {country[0]?.languages[language]}
+                        </Typography>
+                      );
+                    }
+                  }
+                )}
+              </Box>
+            </Stack>
+          </Stack>
+          <Stack
+            id="country-information-3"
+            direction="row"
+            flexWrap="wrap"
+            gap={1}
+          >
+            {country[0]?.borders.map((borderCountry) => {
+              return (
+                <Link
+                  to={`../name/${getCountryByCode(borderCountry)}`}
+                  key={borderCountry}
+                >
+                  <Button variant="contained">
+                    {getCountryByCode(borderCountry)}
+                  </Button>
+                </Link>
               );
-            }
-          })}
-        </Box>
+            })}
+          </Stack>
+        </Stack>
       </Stack>
     </Stack>
   );
