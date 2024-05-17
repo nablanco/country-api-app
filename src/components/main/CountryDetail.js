@@ -32,7 +32,7 @@ const CountryDetail = () => {
     return "Loading...";
   }
 
-  console.log(country[0]?.borders);
+  console.log(country[0]);
   return (
     <Stack mt={7} gap={4} direction={{ sm: "row" }} sx={{ maxWidth: "575px" }}>
       <Box sx={{ width: { xs: "100%", md: "480px" } }}>
@@ -61,7 +61,7 @@ const CountryDetail = () => {
               </Typography>
               <Typography>
                 <b>Population: </b>
-                {country[0]?.population.toLocaleString()}
+                {country[0]?.population?.toLocaleString()}
               </Typography>
               <Typography>
                 <b>Region: </b>
@@ -90,13 +90,13 @@ const CountryDetail = () => {
                     if (index < array.length - 1) {
                       return (
                         <Typography key={currency} component="span">
-                          {country[0]?.currencies[currency].name},{" "}
+                          {country[0]?.currencies[currency]?.name},{" "}
                         </Typography>
                       );
                     } else {
                       return (
                         <Typography key={currency} component="span">
-                          {country[0]?.currencies[currency].name}
+                          {country[0]?.currencies[currency]?.name}
                         </Typography>
                       );
                     }
@@ -133,7 +133,7 @@ const CountryDetail = () => {
             flexWrap="wrap"
             gap={1}
           >
-            {country[0]?.borders.map((borderCountry) => {
+            {country[0]?.borders?.map((borderCountry) => {
               return (
                 <Link
                   to={`../name/${getCountryByCode(borderCountry)}`}
