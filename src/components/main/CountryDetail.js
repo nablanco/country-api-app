@@ -34,7 +34,7 @@ const CountryDetail = () => {
 
   console.log(country[0]);
   return (
-    <Stack mt={7} gap={4} direction={{ sm: "row" }} sx={{ maxWidth: "575px" }}>
+    <Stack mt={7} gap={4} direction={{ sm: "row" }} sx={{ width: "100%" }}>
       <Box sx={{ width: { xs: "100%", md: "480px" } }}>
         <img
           alt={`flag of ${country[0]?.name?.common}`}
@@ -48,7 +48,7 @@ const CountryDetail = () => {
             <b>{country[0]?.name?.common}</b>
           </Typography>
         </Box>
-        <Stack id="country-information-container">
+        <Stack id="country-information-container" gap={{ xs: 3, md: 6 }}>
           <Stack
             direction={{ xs: "column", md: "row" }}
             mt={2}
@@ -129,22 +129,31 @@ const CountryDetail = () => {
           </Stack>
           <Stack
             id="country-information-3"
-            direction="row"
             flexWrap="wrap"
             gap={1}
+            direction={{ xs: "column", small: "row" }}
           >
-            {country[0]?.borders?.map((borderCountry) => {
-              return (
-                <Link
-                  to={`../name/${getCountryByCode(borderCountry)}`}
-                  key={borderCountry}
-                >
-                  <Button variant="contained">
-                    {getCountryByCode(borderCountry)}
-                  </Button>
-                </Link>
-              );
-            })}
+            <Typography>
+              <b>Border Countries:</b>
+            </Typography>
+            <Stack direction="row" flexWrap="wrap" gap={1}>
+              {country[0]?.borders ? (
+                country[0]?.borders?.map((borderCountry) => {
+                  return (
+                    <Link
+                      to={`../name/${getCountryByCode(borderCountry)}`}
+                      key={borderCountry}
+                    >
+                      <Button variant="contained">
+                        {getCountryByCode(borderCountry)}
+                      </Button>
+                    </Link>
+                  );
+                })
+              ) : (
+                <Typography>None</Typography>
+              )}
+            </Stack>
           </Stack>
         </Stack>
       </Stack>
